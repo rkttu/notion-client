@@ -3,15 +3,12 @@ using NotionSample.Models.Contracts;
 
 namespace NotionSample.Models.PropertyValue;
 
-// To Do
-public sealed class NotionCreatedByPropertyValueObject : INotionPropertyValueObject
+public sealed class NotionUnsupportedPropertyValueTypeObject : INotionPropertyValueObject
 {
-    public NotionCreatedByPropertyValueObject(JsonElement elem)
+    public NotionUnsupportedPropertyValueTypeObject(JsonElement elem)
     {
         JsonElement = elem;
     }
 
     public JsonElement JsonElement { get; private set; }
-
-    // created_by
 }

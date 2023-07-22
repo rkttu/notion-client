@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using NotionSample.Models.File;
+using NotionSample.Models.Attachments;
 using NotionSample.Models.Contracts;
 
 namespace NotionSample.Models.Block;

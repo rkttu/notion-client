@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace NotionSample.Models.Comment
 {
-	public sealed class NotionCommentObject
+	public sealed class NotionCommentObject : IJsonWrappedObject
 	{
         public NotionCommentObject(JsonElement elem)
         {

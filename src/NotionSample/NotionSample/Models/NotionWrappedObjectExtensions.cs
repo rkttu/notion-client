@@ -2,14 +2,13 @@
 using System.Collections.ObjectModel;
 using NotionSample.Models.Contracts;
 using NotionSample.Models.User;
-using NotionSample.Models.File;
-using NotionSample.Models.Emoji;
 using NotionSample.Models.Parent;
 using NotionSample.Models.Block;
 using NotionSample.Models.RichText;
 using NotionSample.Models.TemplateMention;
 using NotionSample.Models.Mention;
 using NotionSample.Models.PropertyValue;
+using NotionSample.Models.Attachments;
 
 namespace NotionSample.Models;
 
@@ -31,7 +30,9 @@ internal static class NotionWrappedObjectExtensions
     }
 
     public static INotionTypedObject? CreateNotionTypedObjectInstance(
-        this JsonElement elem, IDictionary<string, Type> map)
+        this JsonElement elem,
+        IDictionary<string, Type> map,
+        Type defaultType)
     {
         var type = elem.GetProperty("type").GetString();
 
@@ -41,11 +42,13 @@ internal static class NotionWrappedObjectExtensions
                 return Activator.CreateInstance(eachPair.Value, elem) as INotionTypedObject;
         }
 
-        return default;
+        return Activator.CreateInstance(defaultType, elem) as INotionTypedObject;
     }
 
     public static INotionRichTextObject? CreateNotionTypedRichTextObjectInstance(
-        this JsonElement elem, IDictionary<string, Type> map)
+        this JsonElement elem,
+        IDictionary<string, Type> map,
+        Type defaultType)
     {
         var type = elem.GetProperty("type").GetString();
 
@@ -55,7 +58,7 @@ internal static class NotionWrappedObjectExtensions
                 return Activator.CreateInstance(eachPair.Value, elem) as INotionRichTextObject;
         }
 
-        return default;
+        return Activator.CreateInstance(defaultType, elem) as INotionRichTextObject;
     }
 
     public static IEnumerable<INotionRichTextObject?> ToNotionRichTextObjects(
@@ -131,7 +134,7 @@ internal static class NotionWrappedObjectExtensions
         });
 
     public static INotionBlockObject? CreateNotionBlockObject(this JsonElement elem) =>
-        elem.CreateNotionTypedObjectInstance(BlockObjectTypes) as INotionBlockObject;
+        elem.CreateNotionTypedObjectInstance(BlockObjectTypes, typeof(NotionUnsupportedBlockObject)) as INotionBlockObject;
 
     private static readonly IDictionary<string, Type> PropertyValueObjectTypes =
         new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()
@@ -159,7 +162,7 @@ internal static class NotionWrappedObjectExtensions
         });
 
     public static INotionPropertyValueObject? CreateNotionPropertyValueObject(this JsonElement elem) =>
-        elem.CreateNotionTypedObjectInstance(PropertyValueObjectTypes) as INotionPropertyValueObject;
+        elem.CreateNotionTypedObjectInstance(PropertyValueObjectTypes, typeof(NotionUnsupportedPropertyValueTypeObject)) as INotionPropertyValueObject;
 
     private static readonly IDictionary<string, Type> RichTextObjectTypes =
         new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()
@@ -170,7 +173,7 @@ internal static class NotionWrappedObjectExtensions
         });
 
     public static INotionRichTextObject? CreateNotionRichTextObject(this JsonElement elem) =>
-        elem.CreateNotionTypedRichTextObjectInstance(RichTextObjectTypes);
+        elem.CreateNotionTypedRichTextObjectInstance(RichTextObjectTypes, typeof(NotionUnsupportedRichTextObject));
 
     private static readonly IDictionary<string, Type> MentionObjectTypes =
         new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()
@@ -184,7 +187,7 @@ internal static class NotionWrappedObjectExtensions
         });
 
     public static INotionMentionObject? CreateNotionMentionObject(this JsonElement elem) =>
-        elem.CreateNotionTypedObjectInstance(MentionObjectTypes) as INotionMentionObject;
+        elem.CreateNotionTypedObjectInstance(MentionObjectTypes, typeof(NotionUnsupportedMentionObject)) as INotionMentionObject;
 
     private static readonly IDictionary<string, Type> TemplateMentionObjectTypes =
         new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()
@@ -194,7 +197,7 @@ internal static class NotionWrappedObjectExtensions
         });
 
     public static INotionTemplateMentionObject? CreateNotionTemplateMentionObject(this JsonElement elem) =>
-        elem.CreateNotionTypedObjectInstance(TemplateMentionObjectTypes) as INotionTemplateMentionObject;
+        elem.CreateNotionTypedObjectInstance(TemplateMentionObjectTypes, typeof(NotionUnsupportedTemplateMentionObject)) as INotionTemplateMentionObject;
 
     private static readonly IDictionary<string, Type> UserObjectTypes =
         new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()
@@ -204,7 +207,7 @@ internal static class NotionWrappedObjectExtensions
         });
 
     public static INotionUserObject? CreateNotionUserObject(this JsonElement elem) =>
-        elem.CreateNotionTypedObjectInstance(UserObjectTypes) as INotionUserObject;
+        elem.CreateNotionTypedObjectInstance(UserObjectTypes, typeof(NotionUnsupportedUserObject)) as INotionUserObject;
 
     private static readonly IDictionary<string, Type> ParentObjectTypes =
         new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()
@@ -216,7 +219,7 @@ internal static class NotionWrappedObjectExtensions
         });
 
     public static INotionTypedObject? CreateParentNotionObject(this JsonElement elem) =>
-        elem.CreateNotionTypedObjectInstance(ParentObjectTypes);
+        elem.CreateNotionTypedObjectInstance(ParentObjectTypes, typeof(NotionUnsupportedParentObject));
 
     private static readonly IDictionary<string, Type> FileExternalObjectTypes =
         new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()
@@ -226,7 +229,7 @@ internal static class NotionWrappedObjectExtensions
         });
 
     public static INotionTypedObject? CreateFileExternalNotionObject(this JsonElement elem) =>
-        elem.CreateNotionTypedObjectInstance(FileExternalObjectTypes);
+        elem.CreateNotionTypedObjectInstance(FileExternalObjectTypes, typeof(NotionUnsupportedAttachmentObject));
 
     private static readonly IDictionary<string, Type> FileExternalEmojiObjectTypes =
         new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()
@@ -237,5 +240,5 @@ internal static class NotionWrappedObjectExtensions
         });
 
     public static INotionTypedObject? CreateFileExternalEmojiNotionObject(this JsonElement elem) =>
-        elem.CreateNotionTypedObjectInstance(FileExternalEmojiObjectTypes);
+        elem.CreateNotionTypedObjectInstance(FileExternalEmojiObjectTypes, typeof(NotionUnsupportedAttachmentObject));
 }

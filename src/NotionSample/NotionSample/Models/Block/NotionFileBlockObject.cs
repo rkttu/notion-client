@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
-using NotionSample.Models.File;
 using NotionSample.Models.Contracts;
+using NotionSample.Models.Attachments;
 
 namespace NotionSample.Models.Block;
 

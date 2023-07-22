@@ -29,15 +29,8 @@
   <ItemGroup>
     <Folder Include="Models\Page\" />
     <Folder Include="Models\Contracts\" />
-    <Folder Include="Models\Emoji\" />
-    <Folder Include="Models\File\" />
-    <Folder Include="Models\User\" />
     <Folder Include="Models\Block\" />
-    <Folder Include="Models\Parent\" />
-    <Folder Include="Models\Mention\" />
     <Folder Include="Models\Database\" />
-    <Folder Include="Models\RichText\" />
-    <Folder Include="Models\TemplateMention\" />
     <Folder Include="Models\Comment\" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using NotionSample.Models.Contracts;
 
-namespace NotionSample.Models.File;
+namespace NotionSample.Models.Attachments;
 
 public sealed class NotionExternalObject : INotionTypedObject
 {
