@@ -139,6 +139,24 @@ internal static class NotionWrappedObjectExtensions
             {
                 new Tuple<string, Type>("date", typeof(NotionDatePropertyValueObject)),
                 new Tuple<string, Type>("title", typeof(NotionTitlePropertyValueObject)),
+                new Tuple<string, Type>("rich_text", typeof(NotionRichTextPropertyValueObject)),
+                new Tuple<string, Type>("number", typeof(NotionNumberPropertyValueObject)),
+                new Tuple<string, Type>("select", typeof(NotionSelectPropertyValueObject)),
+                new Tuple<string, Type>("multi_select", typeof(NotionMultiSelectPropertyValueObject)),
+                new Tuple<string, Type>("status", typeof(NotionStatusPropertyValueObject)),
+                new Tuple<string, Type>("formula", typeof(NotionFormulaPropertyValueObject)),
+                new Tuple<string, Type>("relation", typeof(NotionRelationPropertyValueObject)),
+                new Tuple<string, Type>("rollup", typeof(NotionRollupPropertyValueObject)),
+                new Tuple<string, Type>("people", typeof(NotionPeoplePropertyValueObject)),
+                new Tuple<string, Type>("files", typeof(NotionFilesPropertyValueObject)),
+                new Tuple<string, Type>("checkbox", typeof(NotionCheckBoxPropertyValueObject)),
+                new Tuple<string, Type>("url", typeof(NotionUrlPropertyValueObject)),
+                new Tuple<string, Type>("email", typeof(NotionEmailPropertyValueObject)),
+                new Tuple<string, Type>("phone_number", typeof(NotionPhoneNumberPropertyValueObject)),
+                new Tuple<string, Type>("created_time", typeof(NotionCreatedTimePropertyValueObject)),
+                new Tuple<string, Type>("created_by", typeof(NotionCreatedByPropertyValueObject)),
+                new Tuple<string, Type>("last_edited_time", typeof(NotionLastEditedTimePropertyValueObject)),
+                new Tuple<string, Type>("last_edited_by", typeof(NotionLastEditedByPropertyValueObject)),
             }) as INotionPropertyValueObject;
 
     public static INotionRichTextObject? CreateNotionRichTextObject(
