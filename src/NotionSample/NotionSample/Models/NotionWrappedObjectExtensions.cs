@@ -44,6 +44,20 @@ internal static class NotionWrappedObjectExtensions
         return default;
     }
 
+    public static INotionRichTextObject? CreateNotionTypedRichTextObjectInstance(
+        this JsonElement elem, params Tuple<string, Type>[] map)
+    {
+        var type = elem.GetProperty("type").GetString();
+
+        for (var i = 0; i < map.Length; i++)
+        {
+            if (string.Equals(map[i].Item1, type, StringComparison.Ordinal))
+                return Activator.CreateInstance(map[i].Item2, elem) as INotionRichTextObject;
+        }
+
+        return default;
+    }
+
     public static IEnumerable<INotionRichTextObject?> ToNotionRichTextObjects(
         this JsonElement elem)
     {
@@ -129,13 +143,13 @@ internal static class NotionWrappedObjectExtensions
 
     public static INotionRichTextObject? CreateNotionRichTextObject(
         this JsonElement elem) =>
-        elem.CreateNotionTypedObjectInstance(
+        elem.CreateNotionTypedRichTextObjectInstance(
             new[]
             {
                 new Tuple<string, Type>("text", typeof(NotionTextRichTextObject)),
                 new Tuple<string, Type>("mention", typeof(NotionMentionRichTextObject)),
                 new Tuple<string, Type>("equation", typeof(NotionEquationRichTextObject)),
-            }) as INotionRichTextObject;
+            });
 
     public static INotionMentionObject? CreateNotionMentionObject(
         this JsonElement elem) =>
