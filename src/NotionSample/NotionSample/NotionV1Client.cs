@@ -1,12 +1,9 @@
-﻿using System;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
-using System.Text.Json;
-using NotionSample.Models;
-using NotionSample.Models.Block;
+﻿using NotionSample.Models;
 using NotionSample.Models.Contracts;
 using NotionSample.Models.Page;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace NotionSample;
 
@@ -33,12 +30,12 @@ public sealed class NotionV1Client
 
     public HttpClient HttpClient { get; private set; }
 
-    public async Task<NotionPageObject?> FetchNotionPage(
-        string targetPageId,
+    public async Task<NotionPageObject?> RetrieveNotionPage(
+        string pageId,
         CancellationToken cancellationToken = default)
     {
         var elem = await this.HttpClient.GetFromJsonAsync<JsonElement>(
-            $"pages/{targetPageId}",
+            $"pages/{pageId}",
             cancellationToken)
             .ConfigureAwait(false);
 
@@ -49,12 +46,45 @@ public sealed class NotionV1Client
         return default;
     }
 
-    public async IAsyncEnumerable<INotionBlockObject?> FetchChildNotionBlocks(
-        string? blockId,
-        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async Task<NotionDatabaseObject?> RetrieveNotionDatabase(
+        string databaseId,
+        CancellationToken cancellationToken = default)
     {
+        var elem = await this.HttpClient.GetFromJsonAsync<JsonElement>(
+            $"databases/{databaseId}",
+            cancellationToken)
+            .ConfigureAwait(false);
+
+        if (elem.TryGetProperty("object", out JsonElement elem2) &&
+            string.Equals(elem2.GetString(), "database", StringComparison.Ordinal))
+            return new NotionDatabaseObject(elem);
+
+        return default;
+    }
+
+    public async Task<INotionBlockObject?> RetrieveNotionBlock(
+        string blockId,
+        CancellationToken cancellationToken = default)
+    {
+        var elem = await this.HttpClient.GetFromJsonAsync<JsonElement>(
+            $"blocks/{blockId}",
+            cancellationToken)
+            .ConfigureAwait(false);
+
+        if (elem.TryGetProperty("object", out JsonElement elem2))
+            return elem.CreateNotionBlockObject();
+
+        return default;
+    }
+
+    public async Task<INotionBlockObject> FetchChildNotionBlocks(
+        INotionBlockObject blockObject,
+        CancellationToken cancellationToken = default)
+    {
+        string? blockId = blockObject.Id?.ToString("D");
+
         if (blockId == null)
-            yield break;
+            return blockObject;
 
         string? nextCursor = null;
         JsonElement elem;
@@ -75,7 +105,10 @@ public sealed class NotionV1Client
                 Enumerable.Empty<INotionBlockObject?>();
 
             foreach (var eachBlockObject in results)
-                yield return eachBlockObject;
+            {
+                await Console.Out.WriteLineAsync($"[{eachBlockObject?.GetType().Name}]");
+                blockObject.Children.Add(eachBlockObject);
+            }
 
             var hasMore = elem.TryGetProperty("has_more", out JsonElement elem2) ?
                 elem2.GetBoolean() : false;
@@ -86,35 +119,28 @@ public sealed class NotionV1Client
             if (!hasMore || string.IsNullOrWhiteSpace(nextCursor))
                 break;
         }
+
+        return blockObject;
     }
 
-    public async IAsyncEnumerable<INotionBlockObject?> FetchAllChildNotionBlocks(
-        string? blockId,
-        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async Task<INotionBlockObject?> FetchAllChildNotionBlocks(
+        INotionBlockObject blockObject,
+        Func<INotionBlockObject?, CancellationToken, Task>? callback = default,
+        CancellationToken cancellationToken = default)
     {
-        if (blockId == null)
-            yield break;
+        await FetchChildNotionBlocks(blockObject, cancellationToken).ConfigureAwait(false);
 
-        var queue = new Queue<INotionBlockObject?>();
-
-        await foreach (var eachItem in FetchChildNotionBlocks(blockId, cancellationToken).ConfigureAwait(false))
+        foreach (var eachChildObject in blockObject.Children)
         {
-            queue.Enqueue(eachItem);
-            continue;
-        }
-
-        while (queue.TryDequeue(out INotionBlockObject? childBlock))
-        {
-            if (childBlock == null)
+            if (eachChildObject == null)
                 continue;
 
-            yield return childBlock;
+            await FetchAllChildNotionBlocks(eachChildObject, callback, cancellationToken).ConfigureAwait(false);
 
-            await foreach (var eachChildObject in FetchChildNotionBlocks(childBlock.Id?.ToString("D"), cancellationToken).ConfigureAwait(false))
-            {
-                childBlock.Children.Add(eachChildObject);
-                queue.Enqueue(eachChildObject);
-            }
+            if (callback != null)
+                await callback.Invoke(eachChildObject, cancellationToken).ConfigureAwait(false);
         }
+
+        return blockObject;
     }
 }
