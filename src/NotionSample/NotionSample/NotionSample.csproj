@@ -28,7 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\Page\" />
-    <Folder Include="Models\Contracts\" />
     <Folder Include="Models\Block\" />
     <Folder Include="Models\Database\" />
     <Folder Include="Models\Comment\" />

@@ -9,6 +9,7 @@ using NotionSample.Models.TemplateMention;
 using NotionSample.Models.Mention;
 using NotionSample.Models.PropertyValue;
 using NotionSample.Models.Attachments;
+using NotionSample.Models.LinkPreview;
 
 namespace NotionSample.Models;
 
@@ -73,6 +74,22 @@ internal static class NotionWrappedObjectExtensions
 
         for (var i = 0; i < length; i++)
             list.Add(elem[i].CreateNotionRichTextObject());
+
+        return list.AsReadOnly();
+    }
+
+    public static IEnumerable<NotionUnfurlAttributeObject?> ToNotionUnfurlAttributeObjects(
+        this JsonElement elem)
+    {
+        var length = elem.GetArrayLength();
+
+        if (length < 1)
+            return Enumerable.Empty<NotionUnfurlAttributeObject?>();
+
+        var list = new List<NotionUnfurlAttributeObject?>(length);
+
+        for (var i = 0; i < length; i++)
+            list.Add(new NotionUnfurlAttributeObject(elem[i]));
 
         return list.AsReadOnly();
     }
