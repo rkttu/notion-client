@@ -1,4 +1,9 @@
-﻿namespace NotionSample;
+﻿using NotionSample.Models.Contracts;
+using System;
+using System.Runtime.CompilerServices;
+using System.Threading;
+
+namespace NotionSample;
 
 public sealed class Program
 {
@@ -28,6 +33,11 @@ public sealed class Program
 
         await Console.Out.WriteLineAsync($"Page URL: {page.Url}");
         await Console.Out.WriteLineAsync($"Page Icon Type: {page.Icon?.Type}");
-        return;
+
+        await foreach (var eachChildBlock in notion.FetchAllChildNotionBlocks(targetPageId))
+        {
+            await Console.Out.WriteLineAsync($"[{eachChildBlock?.GetType().Name}]: {eachChildBlock?.Id}");
+        }
     }
+
 }
