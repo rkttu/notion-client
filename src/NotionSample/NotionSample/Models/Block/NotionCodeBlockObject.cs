@@ -18,9 +18,9 @@ public sealed class NotionCodeBlockObject : INotionBlockObject
                 elem2.ToNotionRichTextObjects() : Enumerable.Empty<INotionRichTextObject?>()
             : Enumerable.Empty<INotionRichTextObject?>();
 
-    public IEnumerable<INotionRichTextObject?> RichText =>
+    public IEnumerable<INotionRichTextObject?> Text =>
         JsonElement.TryGetProperty("code", out JsonElement elem) ?
-            elem.TryGetProperty("rich_text", out JsonElement elem2) ?
+            elem.TryGetProperty("text", out JsonElement elem2) ?
                 elem2.ToNotionRichTextObjects() : Enumerable.Empty<INotionRichTextObject?>()
             : Enumerable.Empty<INotionRichTextObject?>();
 

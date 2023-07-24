@@ -12,9 +12,9 @@ public sealed class NotionHeadingLv1BlockObject : INotionBlockObject
 
     public JsonElement JsonElement { get; private set; }
 
-    public IEnumerable<INotionRichTextObject?> RichText =>
+    public IEnumerable<INotionRichTextObject?> Text =>
         JsonElement.TryGetProperty("heading_1", out JsonElement elem) ?
-            elem.TryGetProperty("rich_text", out JsonElement elem2) ?
+            elem.TryGetProperty("text", out JsonElement elem2) ?
                 elem2.ToNotionRichTextObjects() : Enumerable.Empty<INotionRichTextObject?>()
             : Enumerable.Empty<INotionRichTextObject?>();
 
