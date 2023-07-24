@@ -15,4 +15,7 @@ public sealed class NotionPageMentionBlockObject : INotionBlockObject
 
     public NotionPageMentionObject Page =>
         new NotionPageMentionObject(JsonElement);
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

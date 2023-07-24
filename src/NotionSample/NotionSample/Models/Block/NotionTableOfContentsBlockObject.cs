@@ -17,4 +17,7 @@ public sealed class NotionTableOfContentsBlockObject : INotionBlockObject
             elem.TryGetProperty("color", out JsonElement elem2) ?
                 elem2.GetString() : default
             : default;
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

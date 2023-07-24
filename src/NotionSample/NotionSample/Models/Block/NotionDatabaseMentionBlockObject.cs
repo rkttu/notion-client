@@ -15,4 +15,7 @@ public sealed class NotionDatabaseMentionBlockObject : INotionBlockObject
 
     public NotionDatabaseMentionObject Database =>
         new NotionDatabaseMentionObject(JsonElement);
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

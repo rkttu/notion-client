@@ -15,4 +15,7 @@ public sealed class NotionUserMentionBlockObject : INotionBlockObject
 
     public NotionUserMentionObject User =>
         new NotionUserMentionObject(JsonElement);
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

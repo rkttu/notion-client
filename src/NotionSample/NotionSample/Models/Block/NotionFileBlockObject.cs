@@ -30,4 +30,7 @@ public sealed class NotionFileBlockObject : INotionBlockObject
             elem.TryGetProperty("file", out JsonElement elem2) ?
                 new NotionFileObject(elem2) : default
             : default;
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

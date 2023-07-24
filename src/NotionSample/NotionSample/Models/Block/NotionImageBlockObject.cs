@@ -16,4 +16,7 @@ public sealed class NotionImageBlockObject : INotionBlockObject
     public NotionFileObject? Image =>
         JsonElement.TryGetProperty("image", out JsonElement elem) ?
             new NotionFileObject(elem) : default;
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

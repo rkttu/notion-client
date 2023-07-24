@@ -18,9 +18,14 @@ public sealed class NotionTemplateBlockObject : INotionBlockObject
                 elem2.ToNotionRichTextObjects() : Enumerable.Empty<INotionRichTextObject?>()
             : Enumerable.Empty<INotionRichTextObject?>();
 
+    /*
     public IEnumerable<INotionBlockObject?> Children =>
         JsonElement.TryGetProperty("template", out JsonElement elem) ?
             elem.TryGetProperty("children", out JsonElement elem2) ?
                 elem2.ToNotionBlockObjects() : Enumerable.Empty<INotionBlockObject?>()
             : Enumerable.Empty<INotionBlockObject?>();
+    */
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

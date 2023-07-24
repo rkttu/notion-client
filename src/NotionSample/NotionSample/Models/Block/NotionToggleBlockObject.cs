@@ -24,9 +24,14 @@ public sealed class NotionToggleBlockObject : INotionBlockObject
                 elem2.GetString() : default
             : default;
 
+    /*
     public IEnumerable<INotionBlockObject?> Children =>
         JsonElement.TryGetProperty("toggle", out JsonElement elem) ?
             elem.TryGetProperty("children", out JsonElement elem2) ?
                 elem2.ToNotionBlockObjects() : Enumerable.Empty<INotionBlockObject?>()
             : Enumerable.Empty<INotionBlockObject?>();
+    */
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

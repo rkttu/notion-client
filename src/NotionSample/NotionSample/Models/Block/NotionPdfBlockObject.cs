@@ -26,4 +26,7 @@ public sealed class NotionPdfBlockObject : INotionBlockObject
     public NotionExternalObject? External =>
         JsonElement.TryGetProperty("pdf", out JsonElement elem) ?
             new NotionExternalObject(elem) : default;
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

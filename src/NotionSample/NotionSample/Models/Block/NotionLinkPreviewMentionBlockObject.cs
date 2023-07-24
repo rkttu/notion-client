@@ -15,4 +15,7 @@ public sealed class NotionLinkPreviewMentionBlockObject : INotionBlockObject
 
     public NotionLinkPreviewMentionObject LinkPreview =>
         new NotionLinkPreviewMentionObject(JsonElement);
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

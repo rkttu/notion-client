@@ -11,4 +11,7 @@ public sealed class NotionCalloutBlockObject : INotionBlockObject
     }
 
     public JsonElement JsonElement { get; private set; }
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

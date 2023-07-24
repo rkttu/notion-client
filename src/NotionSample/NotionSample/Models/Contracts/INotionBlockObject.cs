@@ -39,4 +39,6 @@ public interface INotionBlockObject : INotionObject, INotionTypedObject
         JsonElement.TryGetProperty("has_children", out JsonElement elem) ?
             elem.GetBoolean()
         : default;
+
+    public IList<INotionBlockObject?> Children { get; }
 }

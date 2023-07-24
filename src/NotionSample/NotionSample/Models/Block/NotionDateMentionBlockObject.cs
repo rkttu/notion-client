@@ -15,4 +15,7 @@ public sealed class NotionDateMentionBlockObject : INotionBlockObject
 
     public NotionDateMentionObject Date =>
         new NotionDateMentionObject(JsonElement);
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

@@ -16,4 +16,7 @@ public sealed class NotionSyncedFromObject : INotionTypedObject
         JsonElement.TryGetProperty("block_id", out JsonElement elem) ?
             elem.TryGetGuid(out Guid val) ? val : default
         : default;
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

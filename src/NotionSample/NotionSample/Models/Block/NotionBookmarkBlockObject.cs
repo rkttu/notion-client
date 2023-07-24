@@ -25,4 +25,7 @@ public sealed class NotionBookmarkBlockObject : INotionBlockObject
                 Uri.TryCreate(elem2.GetString(), UriKind.Absolute, out Uri? val) ? val : default
             : default
         : default;
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

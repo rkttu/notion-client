@@ -13,7 +13,10 @@ public sealed class NotionVideoBlockObject : INotionBlockObject
 
     public JsonElement JsonElement { get; private set; }
 
-    public NotionFileObject? Image =>
+    public NotionFileObject? Video =>
         JsonElement.TryGetProperty("video", out JsonElement elem) ?
             new NotionFileObject(elem) : default;
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

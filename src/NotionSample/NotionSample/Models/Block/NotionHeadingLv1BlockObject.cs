@@ -29,4 +29,7 @@ public sealed class NotionHeadingLv1BlockObject : INotionBlockObject
             elem.TryGetProperty("is_toggleable", out JsonElement elem2) ?
                 elem2.GetBoolean() : default
             : default;
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

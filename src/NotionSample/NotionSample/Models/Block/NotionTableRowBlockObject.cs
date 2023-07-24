@@ -17,4 +17,7 @@ public sealed class NotionTableRowBlockObject : INotionBlockObject
             elem.TryGetProperty("cells", out JsonElement elem2) ?
                 elem2.ToNotionBlockObjects() : Enumerable.Empty<INotionBlockObject?>()
             : Enumerable.Empty<INotionBlockObject?>();
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }

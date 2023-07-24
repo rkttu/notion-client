@@ -32,4 +32,7 @@ public sealed class NotionTableBlockObject : INotionBlockObject
                 elem2.GetBoolean()
             : default
         : default;
+
+    public IList<INotionBlockObject?> Children { get; private set; } =
+        new List<INotionBlockObject?>();
 }
