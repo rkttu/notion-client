@@ -119,6 +119,7 @@ internal static class NotionWrappedObjectExtensions
             { "callout", typeof(NotionCalloutBlockObject) },
             { "child_database", typeof(NotionChildDatabaseBlockObject) },
             { "child_page", typeof(NotionChildPageBlockObject) },
+            { "code", typeof(NotionCodeBlockObject) },
             { "column", typeof(NotionColumnBlockObject) },
             { "column_list", typeof(NotionColumnListBlockObject) },
             { "divider", typeof(NotionDividerBlockObject) },
